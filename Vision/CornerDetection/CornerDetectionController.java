@@ -220,12 +220,15 @@ public class CornerDetectionController {
     // Image Processing
     protected BufferedImage processImage(BufferedImage im) {
         // run corner detection
-        return im;
+        CornerDetectionDetector cdd = new CornerDetectionDetector();
+        ArrayList<Point> c = new ArrayList<Point>();
+        c = cdd.FASTDetection(im, 100);
+        return cdd.getGrayscale();
     }
     
     
     // PUBLIC CLASS METHODS
-    public LineDetectionFrame getFrame() {
+    public CornerDetectionFrame getFrame() {
         return frame;
     }
     
