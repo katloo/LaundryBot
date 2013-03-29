@@ -30,7 +30,10 @@ import april.jmat.Matrix;
 
 
 public class CornerDetectionController {
-    
+   
+	// const
+	private static final int threshold = 17;
+ 
     // args
     private ImageSource		    selectedImageSource;
     private CornerDetectionFrame      frame;
@@ -224,16 +227,18 @@ public class CornerDetectionController {
         // run corner detection
         CornerDetectionDetector cdd = new CornerDetectionDetector();
         ArrayList<FeaturePoint> c = new ArrayList<FeaturePoint>();
-        c = cdd.FASTDetection(im, 100);
+        c = cdd.FASTDetection(im, threshold);
         
         // plot corners on image
         BufferedImage out = im;
         for (int i = 0; i < c.size(); i++) {
             FeaturePoint corner = c.get(i);
             System.out.println("Corner: " + corner.x() + " " + corner.y());
-            if (corner.x()+-2 > 0 && corner.x()+-2 < out.getWidth() && corner.y()+-2 > 0 && corner.y()+-2 < out.getHeight()) {
+            if (corner.x()-2 > 0 && corner.x()+2 < out.getWidth() && corner.y()-2 > 0 && corner.y()+2 < out.getHeight()) {
                 for (int t = -2; t < 2; t++) {
-                    out.setRGB(corner.x() + t, corner.y() + t, 0xff0000ff);
+					for (int r = -2; r < 2; r++) {
+                    	out.setRGB(corner.x() + t, corner.y() + r, 0xff0000ff);
+					}
                 }
             }
         }

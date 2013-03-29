@@ -64,6 +64,7 @@ public class Fast12 {
 		
 		for (int y = 4; y < h - 4; ++y) {
 			for (int x = 4; x < w - 4; ++x) {
+				//System.out.println("x and y: " + x + " " + y);
 				int cb = image[y][x] + threshold;
 				int c_b = image[y][x] - threshold;
 				if (image[y+3][x+0] > cb)
