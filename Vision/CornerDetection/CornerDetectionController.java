@@ -1,5 +1,7 @@
 package Vision.CornerDetection;
 
+import DataTypes.*;
+
 import java.io.*;
 
 import javax.imageio.ImageIO;
@@ -221,7 +223,7 @@ public class CornerDetectionController {
     protected BufferedImage processImage(BufferedImage im) {
         // run corner detection
         CornerDetectionDetector cdd = new CornerDetectionDetector();
-        ArrayList<Point> c = new ArrayList<Point>();
+        ArrayList<FeaturePoint> c = new ArrayList<FeaturePoint>();
         c = cdd.FASTDetection(im, 100);
         return cdd.getGrayscale();
     }

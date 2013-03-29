@@ -1,5 +1,7 @@
 package Vision.CornerDetection;
 
+import DataTypes.*;
+
 import java.awt.Graphics;
 import java.awt.image.*;
 import java.awt.Point;
@@ -18,7 +20,7 @@ public class CornerDetectionDetector {
     private int ysize;
     
     // output
-    private ArrayList<Point> c;
+    private ArrayList<FeaturePoint> c;
     
     // FAST Detection Parameters
     private static final int splat_subtree = 1;
@@ -36,17 +38,17 @@ public class CornerDetectionDetector {
     }
     
     // IMPLEMENTATION METHOD
-    // FAST CORNER DETECTION (9 POINT)
+    // FAST CORNER DETECTION (12 POINT)
     //      By: Edward Rosten
     //
-    public ArrayList<Point> FASTDetection(BufferedImage im, int thresh) {
+    public ArrayList<FeaturePoint> FASTDetection(BufferedImage im, int thresh) {
         // init params
         this.im = im;
         this.threshold = thresh;
         this.xsize = im.getWidth();
         this.ysize = im.getHeight();
         
-        this.c = new ArrayList<Point>();
+        this.c = new ArrayList<FeaturePoint>();
         
         // grayscale image
         this.im_gray = new BufferedImage(xsize, ysize, BufferedImage.TYPE_BYTE_GRAY);
@@ -54,39 +56,22 @@ public class CornerDetectionDetector {
         g.drawImage(im, 0, 0, null);
         g.dispose();
         
-        // image traversal
-        imageTraverse();
+        // retrieve pixel matrix
+        byte[] data = ((DataBufferByte) im_gray.getRaster().getDataBuffer()).getData();
+        int[][] im_mat = new int[xsize][ysize];
+        for (int j = 0; j < ysize; j++) {
+            for (int i = 0; i < xsize; i++) {
+                im_mat[i][j] = data[i + j*xsize];
+            }
+        }
         
-        // non max suppression
-        nonmax_suppression();
+        // fast12 detection
+        c = Fast12.detect(im_mat, xsize, ysize, thresh);
         
         // return center points
         return c;
     }
-    
-    
-    // PROTECTED HELPER FUNCTIONS
-    // IMAGE TRAVERSAL
-    protected void imageTraverse() {
-        // put pixels into array
-        byte[] data = ((DataBufferByte) im_gray.getRaster().getDataBuffer()).getData();
-        System.out.println(data.length);
-        
-        /*
-        // traverse image
-        for (int x = 4; x < xsize - 3; x++) {
-            for (int y = 4; y < ysize - 3; y++) {
-                int cb = data[x + y*xsize];
-            }
-        }
-        */
-        
-    }
-    
-    // NON MAX SUPPRESSION
-    protected void nonmax_suppression() {
-        
-    }
+
     
     // ACCESS METHODS
     public BufferedImage getGrayscale() {
