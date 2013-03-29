@@ -1,5 +1,7 @@
 package Vision.CornerDetection;
 
+import DataTypes.*;
+
 import javax.swing.*;
 import java.awt.*;
 
