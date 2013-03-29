@@ -225,7 +225,20 @@ public class CornerDetectionController {
         CornerDetectionDetector cdd = new CornerDetectionDetector();
         ArrayList<FeaturePoint> c = new ArrayList<FeaturePoint>();
         c = cdd.FASTDetection(im, 100);
-        return cdd.getGrayscale();
+        
+        // plot corners on image
+        BufferedImage out = im;
+        for (int i = 0; i < c.size(); i++) {
+            FeaturePoint corner = c.get(i);
+            System.out.println("Corner: " + corner.x() + " " + corner.y());
+            if (corner.x()+-2 > 0 && corner.x()+-2 < out.getWidth() && corner.y()+-2 > 0 && corner.y()+-2 < out.getHeight()) {
+                for (int t = -2; t < 2; t++) {
+                    out.setRGB(corner.x() + t, corner.y() + t, 0xff0000ff);
+                }
+            }
+        }
+        
+        return out;
     }
     
     
