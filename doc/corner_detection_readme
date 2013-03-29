@@ -1,0 +1,12 @@
+CORNER DETECTION:
+An Implementation of Edward Rosten's FAST Corner Detection Method
+
+The FAST Corner Detection method is a segment-test detector that finds corners in an image.  We run through the image with a contiguous arc of pixels where, if there are more than "n" contiguous pixels brighter than the center of the arc, we have a possible corner. We chose to implement this algorithm where n = 12
+
+By implementing a "20 questions" sort of implementation, we are able to reduce the amount of time it takes to analyze each arc. Only after the arc passes all tests do we denote p as a possible corner.
+
+Non-maximal suppression is used to solve the problem of having corners clustered together.
+
+We chose to implement the n = 12 FAST detector with non-max suppression
+
+The only main flaw of this implementation is its dependency on a threshold. We hope that since we are using the same camera for our system, we wold be able to solve for a good thresholding value that will give us consistent results.
