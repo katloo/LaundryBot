@@ -32,7 +32,7 @@ import april.jmat.Matrix;
 public class CornerDetectionController {
    
 	// const
-	private static final int threshold = 17;
+	private static final int threshold = 20;
  
     // args
     private ImageSource		    selectedImageSource;
@@ -186,6 +186,9 @@ public class CornerDetectionController {
 		// BUILD NEW THREAD
 		this.selectedImageSource.start();
 		this.imageThread = new Thread(new Runnable() {
+
+			private long timeOfLastFrame = 0;
+
 			@Override
             public void run() {
                 ImageSourceFormat fmt = CornerDetectionController.this.selectedImageSource.getCurrentFormat();
@@ -212,6 +215,10 @@ public class CornerDetectionController {
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
+
+							System.out.println("Time between frames: " + (System.currentTimeMillis() - timeOfLastFrame));
+							timeOfLastFrame = System.currentTimeMillis();
+
                             BufferedImage out = CornerDetectionController.this.processImage(im);
                             CornerDetectionController.this.getFrame().getCenterImage().setImage(out);
                         }
@@ -224,6 +231,7 @@ public class CornerDetectionController {
     
     // Image Processing
     protected BufferedImage processImage(BufferedImage im) {
+
         // run corner detection
         CornerDetectionDetector cdd = new CornerDetectionDetector();
         ArrayList<FeaturePoint> c = new ArrayList<FeaturePoint>();
@@ -231,17 +239,19 @@ public class CornerDetectionController {
         
         // plot corners on image
         BufferedImage out = im;
+		//System.out.println("New Image:");
         for (int i = 0; i < c.size(); i++) {
             FeaturePoint corner = c.get(i);
-            System.out.println("Corner: " + corner.x() + " " + corner.y());
-            if (corner.x()-2 > 0 && corner.x()+2 < out.getWidth() && corner.y()-2 > 0 && corner.y()+2 < out.getHeight()) {
-                for (int t = -2; t < 2; t++) {
-					for (int r = -2; r < 2; r++) {
+            //System.out.println("Corner: " + corner.x() + " " + corner.y());
+            if (corner.x()-1 > 0 && corner.x()+1 < out.getWidth() && corner.y()-1 > 0 && corner.y()+1 < out.getHeight()) {
+                for (int t = -1; t < 1; t++) {
+					for (int r = -1; r < 1; r++) {
                     	out.setRGB(corner.x() + t, corner.y() + r, 0xff0000ff);
 					}
                 }
             }
         }
+	
         
         return out;
     }

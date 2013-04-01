@@ -57,7 +57,7 @@ public class CornerDetectionDetector {
         g.dispose();
         
         // retrieve pixel matrix
-		System.out.println("Image Dimensions: " + xsize + " x " + ysize);
+		//System.out.println("Image Dimensions: " + xsize + " x " + ysize);
         byte[] data = ((DataBufferByte) im_gray.getRaster().getDataBuffer()).getData();
         int[][] im_mat = new int[ysize][xsize];
         for (int j = 0; j < ysize; j++) {
